@@ -1,6 +1,9 @@
 package com.golshadi.orientationSensor;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 import android.util.Log;
 import com.golshadi.orientationSensor.sensors.Orientation;
 import com.golshadi.orientationSensor.utils.OrientationSensorInterface;
@@ -9,12 +12,18 @@ import com.golshadi.orientationSensor.utils.OrientationSensorInterface;
  * Created by majidGolshadi on 9/22/2014.
  */
 public class TestActivity extends Activity implements OrientationSensorInterface{
+	private Orientation orientationSensor;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+        orientationSensor = new Orientation(this.getApplicationContext(), this);
+	}
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Orientation orientationSensor = new Orientation(this.getApplicationContext(), this);
 
         //------Turn Orientation sensor ON-------
         // set tolerance for any directions
@@ -25,16 +34,21 @@ public class TestActivity extends Activity implements OrientationSensorInterface
         // 1 UI
         // 2 GAME
         // 3 FASTEST
-        orientationSensor.on(0);
+        orientationSensor.on(2);
         //---------------------------------------
 
-
-        // turn orientation sensor off
-        orientationSensor.off();
 
         // return true or false
         orientationSensor.isSupport();
 
+    }
+    
+    @Override
+    protected void onPause() {
+        // turn orientation sensor off
+        orientationSensor.off();
+        
+    	super.onPause();
     }
 
     @Override
